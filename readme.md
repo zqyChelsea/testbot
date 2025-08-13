@@ -1,28 +1,28 @@
-本项目是一个基于LLOneBot的QQ机器人
+This project is a QQ bot based on LLOneBot
 
-* node版本: 22.2.0
+* Node version: 22.2.0
 
-* [LLOneBot](https://github.com/LLOneBot/LLOneBot) 版本: 3.26.4 
+* [LLOneBot](https://github.com/LLOneBot/LLOneBot) version: 3.26.4 
 
-使用pnpm进行管理, 安装方法
+Use pnpm for management, installation method:
 
 ```bash
 npm i -g pnpm
 pnpm i
 ```
 
-在 /config/LLOneBotConfig.js 里面修改配置
+Modify configuration in /config/LLOneBotConfig.js
 
 ```js
 export default {
-    mode: "http", // 模式 http(http发送请求 + 事件上报), 未来支持WebSocket
+    mode: "http", // Mode: http(http request + event reporting), WebSocket support in the future
     httpServer: {
-        url: "http://127.0.0.1", // Http服务地址
-        port: 3110 // 端口
+        url: "http://127.0.0.1", // Http service address
+        port: 3110 // Port
     },
-    httpSubmit: { // http上报端口
-        port: 31111, // 请求端口
-        urlPath: "/bot/submit" // 请求路径
+    httpSubmit: { // http reporting port
+        port: 31111, // Request port
+        urlPath: "/bot/submit" // Request path
     },
     webSocket: {
         
@@ -30,45 +30,45 @@ export default {
 }
 ```
 
-文件命名规范
+File naming conventions
 
-- 多个单词大驼峰
-- 单个单词小写(除非专用词)
+- Multiple words use PascalCase
+- Single words use lowercase (unless it's a proper noun)
 
-编码规划
+Coding guidelines
 
-- 函数里不应该修改对象参数, 如果需要, 拷贝一份对象再使用
+- Functions should not modify object parameters, if needed, copy the object first then use it
 
-## http 模式流程
+## HTTP Mode Flow
 
-服务器 -> 收到信息 -> 分析信息 -> 发布信息到对应分类
+Server -> Receives message -> Analyzes message -> Publishes message to corresponding category
 
-处理器 -> 订阅信息 -> 处理
+Processor -> Subscribes to message -> Processes
 
-订阅内容: 
+Subscription content: 
 
-* [上报消息](https://docs.go-cqhttp.org/event/#%E6%89%80%E6%9C%89%E4%B8%8A%E6%8A%A5)
-* [消息类型](https://docs.go-cqhttp.org/cqcode/#%E8%BD%AC%E4%B9%89)
+* [Reported messages](https://docs.go-cqhttp.org/event/#%E6%89%80%E6%9C%89%E4%B8%8A%E6%8A%A5)
+* [Message types](https://docs.go-cqhttp.org/cqcode/#%E8%BD%AC%E4%B9%89)
 
 ```js
 {
-    ...msg, // msg详见上报消息
-    content: "内容", // 检测 文本消息内容 (指令)
-    atMe: true, // 是否 at 自己
+    ...msg, // msg details see reported messages
+    content: "content", // Detect text message content (commands)
+    atMe: true, // Whether @ mentions self
 }
 ```
 
-### 编写 plugin 步骤
+### Writing Plugin Steps
 
-* 在 src/plugins/ 里建立一个新的 plugin 包, 写一个主程序js文件
-* 修改 src/plugins/config.js, 在 plugins 里添加 主程序 js 文件
+* Create a new plugin package in src/plugins/, write a main program js file
+* Modify src/plugins/config.js, add the main program js file to plugins
 
 ```js
 // test-plugin/app.js
 import MsgSubUtil from '../../util/MsgSubUtil.js'
 
 MsgSubUtil.subPrefixR("#", (msg) => {
-    return "收到指令: " + msg.content;
+    return "Received command: " + msg.content;
 })
 ```
 
@@ -80,5 +80,5 @@ export default {
 
 ## TODO
 
-* 参数校验
-* 订阅超时检验
+* Parameter validation
+* Subscription timeout validation
